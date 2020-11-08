@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
     <RootNamespace>biometrisk_adgangskontrol_functions</RootNamespace>
+    <UserSecretsId>da3147db-cb88-44fa-8bb5-1e6e182d7ba9</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0" />
