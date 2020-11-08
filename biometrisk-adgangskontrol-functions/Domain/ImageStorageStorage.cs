@@ -9,18 +9,17 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
 
-namespace biometrisk_adgangskontrol_functions.Core
+namespace biometrisk_adgangskontrol_functions.Domain
 {
-    public static class UploadPhoto
+    public class ImageStorageStorage : IImageStorage
     {
-        private static readonly string ConnectionString =
-            Environment.GetEnvironmentVariable("StorageConnectionAppSetting");
+        private static readonly string STORAGE_CONNECTION = Environment.GetEnvironmentVariable("StorageConnection");
+        private static readonly string CONTAINER_NAME = "access-registration-images";
+        private static readonly string BLOB_STORAGE_IMAGE_URL = Environment.GetEnvironmentVariable("BlobStorageImageUrl");
 
-        private static readonly string containerName = "photos";
-
-        public static async Task Run(IList<SimilarFace> similarFaces, IFormFile file)
+        public async Task<string> Save(IList<SimilarFace> similarFaces, IFormFile file)
         {
-            var container = new BlobContainerClient(ConnectionString, containerName);
+            var container = new BlobContainerClient(STORAGE_CONNECTION, CONTAINER_NAME);
 
             using var srFile = new StreamReader(file.OpenReadStream());
             var imageBytes = Convert.FromBase64String(await srFile.ReadToEndAsync());
@@ -38,6 +37,8 @@ namespace biometrisk_adgangskontrol_functions.Core
             {
                 ContentType = file.ContentType
             });
+
+            return $"{BLOB_STORAGE_IMAGE_URL}{file.FileName}";
         }
     }
 }

@@ -9,13 +9,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.CognitiveServices.Vision.Face;
 using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
 
-namespace biometrisk_adgangskontrol_functions.Core
+namespace biometrisk_adgangskontrol_functions.Domain
 {
-    public static class FaceRecognition
+    public class FaceRecognition : IFaceRecognition
     {
-        // TODO Skal flyttes til secrects
-        private const string SUBSCRIPTION_KEY = "0bfe6bc8281d4dccbb918a229faed050";
-        private const string ENDPOINT = "https://slbioakface.cognitiveservices.azure.com/";
+        private static readonly string FACE_CONNECTION = Environment.GetEnvironmentVariable("FaceConnection");
+        private static readonly string FACE_PRIMARY_KEY = Environment.GetEnvironmentVariable("FacePrimaryKey");
         private const string RECOGNITION_MODEL3 = RecognitionModel.Recognition03;
 
         // TODO Skal læses fra image mappen
@@ -26,15 +25,15 @@ namespace biometrisk_adgangskontrol_functions.Core
         };
 
 
-        public static async Task<IList<SimilarFace>> FaceAccessControl(IFormFile file)
+        public async Task<IList<SimilarFace>> FaceAccessControl(IFormFile file)
         {
-            var client = Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
+            var client = Authenticate(FACE_CONNECTION, FACE_PRIMARY_KEY);
             return await FindSimilar(client, RECOGNITION_MODEL3, file);
         }
 
-        public static async Task<PersistedFace> FaceEntity(Guid persistedFaceId)
+        public async Task<PersistedFace> FaceEntity(Guid persistedFaceId)
         {
-            var client = Authenticate(ENDPOINT, SUBSCRIPTION_KEY);
+            var client = Authenticate(FACE_CONNECTION, FACE_PRIMARY_KEY);
             return await client.LargeFaceList.GetFaceAsync(TARGET_FACE_IDS, persistedFaceId);
         }
 
