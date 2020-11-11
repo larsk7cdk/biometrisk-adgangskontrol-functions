@@ -43,6 +43,8 @@ namespace biometrisk_adgangskontrol_functions.Functions
                 SqlQuery = "SELECT * FROM items ORDER BY items.AccessTimeStamp DESC")] IEnumerable<AccessRegistrationItem> accessRegistrations,
             ILogger log)
         {
+            log.LogInformation($"AccessRegistrationsFunction is called!");
+
             var response = accessRegistrations.Select(s =>
                 new AccessRegistrationsResponse
                 {
