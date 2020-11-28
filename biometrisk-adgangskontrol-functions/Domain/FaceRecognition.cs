@@ -11,30 +11,23 @@ using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
 
 namespace biometrisk_adgangskontrol_functions.Domain
 {
+    /// <summary>
+    ///     Azure Face Recognition
+    ///     Facade mod Azure Face API
+    /// </summary>
     public class FaceRecognition : IFaceRecognition
     {
         private static readonly string FACE_CONNECTION = Environment.GetEnvironmentVariable("FaceConnection");
         private static readonly string FACE_PRIMARY_KEY = Environment.GetEnvironmentVariable("FacePrimaryKey");
         private const string RECOGNITION_MODEL3 = RecognitionModel.Recognition03;
 
-        // TODO Skal læses fra image mappen
-        private const string TARGET_FACE_IDS = "E3481CCB-6A7D-4E1E-ADAC-688855D4224F";
-        private static readonly IList<string> TARGET_IMAGE_FILE_NAMES = new List<string>
-        {
-            "LAL1.jpg"
-        };
-
-
+        /// <summary>
+        ///     Modtager et billede og sammenligner dette med billeder i systemet for at undersøge om der er et match
+        /// </summary>
         public async Task<IList<SimilarFace>> FaceAccessControl(IFormFile file)
         {
             var client = Authenticate(FACE_CONNECTION, FACE_PRIMARY_KEY);
             return await FindSimilar(client, RECOGNITION_MODEL3, file);
-        }
-
-        public async Task<PersistedFace> FaceEntity(Guid persistedFaceId)
-        {
-            var client = Authenticate(FACE_CONNECTION, FACE_PRIMARY_KEY);
-            return await client.LargeFaceList.GetFaceAsync(TARGET_FACE_IDS, persistedFaceId);
         }
 
         private static IFaceClient Authenticate(string endpoint, string key) => new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
@@ -43,12 +36,12 @@ namespace biometrisk_adgangskontrol_functions.Domain
         {
             IList<Guid?> targetFaceIds = new List<Guid?>();
 
-            for (var i = 0; i < TARGET_IMAGE_FILE_NAMES.Count; i++)
+            var referenceImages = await new ImageStorage().GetAllReferenceImages();
+
+            foreach (var referenceImage in referenceImages)
             {
-                var filename = "images/" + TARGET_IMAGE_FILE_NAMES[i];
-                var fileByte = File.ReadAllBytes(filename);
-                Stream s = new MemoryStream(fileByte);
-                var faces = await DetectFaceRecognize(client, s, recognitionModel);
+                await using var ms = new MemoryStream(referenceImage);
+                var faces = await DetectFaceRecognize(client, ms, recognitionModel);
                 targetFaceIds.Add(faces[0].FaceId.Value);
             }
 

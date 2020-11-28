@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "biometrisk-adgangskontrol-functions", "biometrisk-adgangskontrol-functions\biometrisk-adgangskontrol-functions.csproj", "{52FBD369-6033-4474-B140-55772BC5ADF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "biometrisk-adgangskontrol-functions.test", "biometrisk-adgangskontrol-functions.test\biometrisk-adgangskontrol-functions.test.csproj", "{A57F52CB-9248-426B-BB70-811DA8F67FC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{52FBD369-6033-4474-B140-55772BC5ADF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52FBD369-6033-4474-B140-55772BC5ADF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52FBD369-6033-4474-B140-55772BC5ADF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57F52CB-9248-426B-BB70-811DA8F67FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57F52CB-9248-426B-BB70-811DA8F67FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57F52CB-9248-426B-BB70-811DA8F67FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57F52CB-9248-426B-BB70-811DA8F67FC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
